@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Briefcase, MapPin, Building2, ChevronRight, Info } from "lucide-react";
 
 // ==============================================
-// ⚙️ 設定エリア
+// ⚙️ 設定エリア：新しいGASのURLに書き換えてください
 // ==============================================
 const API_URL = "https://script.google.com/macros/s/AKfycbxcbcQ2dI2PNwb8fLErHZ9F3mcYkNyV-ys4ZfFHosjRgbrNhHDvKy0DYZIO_rD7HlON/exec";
 
@@ -74,13 +74,11 @@ const JobCard = ({ job, onApply }) => (
         </p>
       </div>
 
-      {/* --- 追加：仕事内容の表示セクション --- */}
       <div className="mb-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
         <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
           {job.description || "詳細な仕事内容は現在準備中です。"}
         </p>
       </div>
-      {/* ---------------------------------- */}
 
       <button
         onClick={() => onApply(job)}
@@ -98,6 +96,7 @@ export default function App() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // データ取得
   useEffect(() => {
     fetch(API_URL)
       .then(res => res.json())
@@ -111,6 +110,37 @@ export default function App() {
       });
   }, []);
 
+  // 📢 応募処理（GASへデータを送信）
+  const handleApply = async (job) => {
+    const name = prompt("お名前を入力してください");
+    if (!name) return;
+    const phone = prompt("連絡先電話番号を入力してください");
+    if (!phone) return;
+
+    try {
+      // GASにデータを送信
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          jobTitle: job.title,
+          userName: name,
+          userPhone: phone
+        })
+      });
+
+      if (response.ok) {
+        alert("応募が完了しました！LINE通知を送信しました。");
+        // ここにLINE公式アカウントの「友だち追加URL」を入れると完璧です！
+        // window.location.href = "https://line.me/R/ti/p/@あなたのID";
+      } else {
+        throw new Error("送信失敗");
+      }
+    } catch (error) {
+      console.error("応募エラー:", error);
+      alert("エラーが発生しました。時間を置いて再度お試しください。");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       <Header activeView={view} setView={setView} />
@@ -123,7 +153,11 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {jobs.length > 0 ? (
               jobs.map(job => (
-                <JobCard key={job.id} job={job} onApply={(j) => alert(`${j.title}に応募しました（デモ）`)} />
+                <JobCard 
+                  key={job.id} 
+                  job={job} 
+                  onApply={handleApply} 
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-20 text-slate-400">
