@@ -136,3 +136,10 @@ export default function App() {
     </div>
   );
 }
+{/* --- 追加：仕事内容の表示セクション --- */}
+<div className="mb-4 p-3 bg-yellow-100 border border-yellow-300">
+  <p className="font-bold text-red-600">デバッグ：{job.title}</p>
+  <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
+    {job.description || "★データが空です★"}
+  </p>
+</div>
