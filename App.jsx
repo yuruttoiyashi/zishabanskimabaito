@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Briefcase, MapPin, Building2, ChevronRight } from "lucide-react";
+import { Briefcase, MapPin, Building2, ChevronRight, Info } from "lucide-react";
 
 // ==============================================
 // ⚙️ 設定エリア
@@ -65,7 +65,7 @@ const JobCard = ({ job, onApply }) => (
     </div>
     <div className="p-5">
       <h3 className="text-lg font-bold text-slate-900 mb-1 leading-tight">{job.title}</h3>
-      <div className="flex flex-col gap-1 mb-4">
+      <div className="flex flex-col gap-1 mb-3">
         <p className="text-slate-500 text-sm flex items-center gap-1">
           <Building2 size={14} /> {job.company}
         </p>
@@ -73,6 +73,15 @@ const JobCard = ({ job, onApply }) => (
           <MapPin size={14} /> {job.location}
         </p>
       </div>
+
+      {/* --- 追加：仕事内容の表示セクション --- */}
+      <div className="mb-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+        <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
+          {job.description || "詳細な仕事内容は現在準備中です。"}
+        </p>
+      </div>
+      {/* ---------------------------------- */}
+
       <button
         onClick={() => onApply(job)}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all active:scale-95 shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
@@ -84,7 +93,6 @@ const JobCard = ({ job, onApply }) => (
   </div>
 );
 
-// メインのAppコンポーネント
 export default function App() {
   const [view, setView] = useState("list");
   const [jobs, setJobs] = useState([]);
@@ -113,9 +121,15 @@ export default function App() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {jobs.map(job => (
-              <JobCard key={job.id} job={job} onApply={(j) => alert(`${j.title}に応募しました（デモ）`)} />
-            ))}
+            {jobs.length > 0 ? (
+              jobs.map(job => (
+                <JobCard key={job.id} job={job} onApply={(j) => alert(`${j.title}に応募しました（デモ）`)} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-20 text-slate-400">
+                表示できる募集案件がありません。
+              </div>
+            )}
           </div>
         )}
       </main>
