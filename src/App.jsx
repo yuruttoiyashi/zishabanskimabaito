@@ -4,7 +4,7 @@ import { Briefcase, MapPin, Building2, ChevronRight, Info } from "lucide-react";
 // ==============================================
 // ⚙️ 設定エリア：新しいGASのURLに書き換えてください
 // ==============================================
-const API_URL = "https://script.google.com/macros/s/AKfycbxcbcQ2dI2PNwb8fLErHZ9F3mcYkNyV-ys4ZfFHosjRgbrNhHDvKy0DYZIO_rD7HlON/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzqamV33S_VOr2J3LrbSikhbLedgaYlIgF-auNQWOw936N5xtyGZBu2KpesL0kbVTMB/exec";
 
 // ==============================================
 // 📱 コンポーネント
